@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filters - Formatação de Texto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f5f5f5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #003366;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fbff;
+            border-radius: 6px;
+            border-left: 4px solid #0066cc;
+        }
+
+        h2 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .demo {
+            background: white;
+            border: 2px solid #e0e7ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        input {
+            padding: 8px 12px;
+            border: 2px solid #e0e7ff;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+            margin: 10px 0;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0066cc;
+        }
+
+        .preview {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border-left: 4px solid #0066cc;
+            font-weight: 600;
+            color: #003366;
+        }
+
+        .code {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .comparison-item {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #e0e7ff;
+        }
+
+        .comparison-item strong {
+            color: #0066cc;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+
+<style id="chatgpt-theme">
+:root{
+ --bg:#eef2ff;--card:#ffffff;--primary:#4f46e5;--primary2:#7c3aed;
+ --text:#1f2937;--muted:#6b7280;--border:#e5e7eb;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;padding:32px;
+ font-family:'Segoe UI',Tahoma,sans-serif;
+ color:var(--text);
+ background:
+ radial-gradient(circle at top right,#c7d2fe 0,#eef2ff 35%,#f8fafc 100%);
+}
+#app,.app,.container{
+ max-width:1100px;
+ margin:auto;
+ background:var(--card);
+ border-radius:18px;
+ padding:30px;
+ box-shadow:0 18px 40px rgba(79,70,229,.12);
+ border:1px solid rgba(255,255,255,.5);
+}
+h1,h2,h3{
+ margin-top:0;
+ color:var(--primary);
+ border-left:6px solid var(--primary2);
+ padding-left:12px;
+}
+p,label,span{line-height:1.6}
+input,select,textarea{
+ width:100%;
+ max-width:420px;
+ padding:12px 14px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ outline:none;
+ transition:.25s;
+ background:#fff;
+}
+input:focus,select:focus,textarea:focus{
+ border-color:var(--primary);
+ box-shadow:0 0 0 4px rgba(79,70,229,.12);
+}
+button{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+ border:none;
+ border-radius:12px;
+ padding:12px 20px;
+ font-weight:600;
+ cursor:pointer;
+ transition:.25s;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(79,70,229,.25)}
+table{
+ width:100%;
+ border-collapse:collapse;
+ background:#fff;
+ border-radius:12px;
+ overflow:hidden;
+}
+th{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+}
+th,td{
+ padding:12px;
+ border-bottom:1px solid var(--border);
+ text-align:left;
+}
+code{
+ background:#eef2ff;
+ padding:2px 6px;
+ border-radius:6px;
+ color:#4338ca;
+}
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Filters - Formatação de Texto</h1>
+
+        <div id="app">
+            <!-- Capitalize -->
+            <div class="section">
+                <h2>Capitalize</h2>
+                <div class="demo">
+                    <input v-model="text1" placeholder="Digite um texto">
+                    <div class="preview">{{ text1 | capitalize }}</div>
+                    <div class="code">{{ text1 | capitalize }}</div>
+                </div>
+            </div>
+
+            <!-- Uppercase -->
+            <div class="section">
+                <h2>Uppercase</h2>
+                <div class="demo">
+                    <input v-model="text2" placeholder="Digite um texto">
+                    <div class="preview">{{ text2 | uppercase }}</div>
+                    <div class="code">{{ text2 | uppercase }}</div>
+                </div>
+            </div>
+
+            <!-- Lowercase -->
+            <div class="section">
+                <h2>Lowercase</h2>
+                <div class="demo">
+                    <input v-model="text3" placeholder="Digite um texto">
+                    <div class="preview">{{ text3 | lowercase }}</div>
+                    <div class="code">{{ text3 | lowercase }}</div>
+                </div>
+            </div>
+
+            <!-- Reverse -->
+            <div class="section">
+                <h2>Reverse</h2>
+                <div class="demo">
+                    <input v-model="text4" placeholder="Digite um texto">
+                    <div class="preview">{{ text4 | reverse }}</div>
+                    <div class="code">{{ text4 | reverse }}</div>
+                </div>
+            </div>
+
+            <!-- Truncate -->
+            <div class="section">
+                <h2>Truncate</h2>
+                <div class="demo">
+                    <input v-model="text5" placeholder="Digite um texto longo">
+                    <div class="preview">{{ text5 | truncate(20) }}</div>
+                    <div class="code">{{ text5 | truncate(20) }}</div>
+                </div>
+            </div>
+
+            <!-- Currency -->
+            <div class="section">
+                <h2>Currency (Moeda)</h2>
+                <div class="demo">
+                    <input type="number" v-model.number="amount" placeholder="Digite um valor">
+                    <div class="preview">{{ amount | currency }}</div>
+                    <div class="code">{{ amount | currency }}</div>
+                </div>
+            </div>
+
+            <!-- Chaining Filters -->
+            <div class="section">
+                <h2>Combinando Filtros (Pipe)</h2>
+                <div class="demo">
+                    <input v-model="text6" placeholder="Digite um texto">
+                    <div class="comparison">
+                        <div class="comparison-item">
+                            <strong>Capitalize + Uppercase</strong>
+                            {{ text6 | capitalize | uppercase }}
+                        </div>
+                        <div class="comparison-item">
+                            <strong>Lowercase + Reverse</strong>
+                            {{ text6 | lowercase | reverse }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Todos os Filtros Disponíveis -->
+            <div class="section">
+                <h2>📋 Filtros Customizados Disponíveis</h2>
+                <div class="demo" style="font-size: 14px;">
+                    <ul style="margin-left: 20px;">
+                        <li><code>capitalize</code> - Primeira letra maiúscula</li>
+                        <li><code>uppercase</code> - Todas as letras maiúsculas</li>
+                        <li><code>lowercase</code> - Todas as letras minúsculas</li>
+                        <li><code>reverse</code> - Inverte o texto</li>
+                        <li><code>truncate(length)</code> - Corta o texto</li>
+                        <li><code>currency</code> - Formata como moeda (R$)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script>
+        Vue.filter('capitalize', function(value) {
+            if (!value) return ''
+            value = value.toString()
+            return value.charAt(0).toUpperCase() + value.slice(1)
+        })
+
+        Vue.filter('uppercase', function(value) {
+            if (!value) return ''
+            return value.toString().toUpperCase()
+        })
+
+        Vue.filter('lowercase', function(value) {
+            if (!value) return ''
+            return value.toString().toLowerCase()
+        })
+
+        Vue.filter('reverse', function(value) {
+            if (!value) return ''
+            return value.toString().split('').reverse().join('')
+        })
+
+        Vue.filter('truncate', function(value, length) {
+            if (!value) return ''
+            if (value.length <= length) return value
+            return value.substring(0, length) + '...'
+        })
+
+        Vue.filter('currency', function(value) {
+            if (!value) return 'R$ 0,00'
+            return 'R$ ' + parseFloat(value).toFixed(2).replace('.', ',')
+        })
+
+        new Vue({
+            el: '#app',
+            data: {
+                text1: '',
+                text2: '',
+                text3: '',
+                text4: '',
+                text5: '',
+                text6: '',
+                amount: 0
+            }
+        });
+    </script>
+</body>
+</html>

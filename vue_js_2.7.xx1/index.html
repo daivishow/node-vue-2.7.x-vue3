@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso Vue.js - Menu Principal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f5f5f5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+            padding: 40px 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #003366;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #0066cc;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .description {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
+        }
+
+        .module-header {
+            background: linear-gradient(135deg, #0066cc 0%, #003366 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .module-number {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .module-body {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .module-description {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            flex: 1;
+        }
+
+        .module-link {
+            background: #0066cc;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .module-link:hover {
+            background: #0052a3;
+        }
+
+        .practices-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .practices-section h2 {
+            color: #003366;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 10px;
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .practice-card {
+            background: #f8fbff;
+            border: 2px solid #0066cc;
+            border-radius: 6px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+        }
+
+        .practice-card:hover {
+            background: #e3f2fd;
+            transform: translateY(-2px);
+        }
+
+        .practice-card h3 {
+            color: #0066cc;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .practice-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .practice-link {
+            background: #0066cc;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .practice-link:hover {
+            background: #0052a3;
+        }
+
+        .features {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .features h2 {
+            color: #003366;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .feature-item {
+            background: #f8fbff;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #0066cc;
+        }
+
+        .feature-item strong {
+            color: #0066cc;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .feature-item p {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        footer {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 20px;
+            }
+        }
+    </style>
+
+<style id="chatgpt-theme">
+:root{
+ --bg:#eef2ff;--card:#ffffff;--primary:#4f46e5;--primary2:#7c3aed;
+ --text:#1f2937;--muted:#6b7280;--border:#e5e7eb;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;padding:32px;
+ font-family:'Segoe UI',Tahoma,sans-serif;
+ color:var(--text);
+ background:
+ radial-gradient(circle at top right,#c7d2fe 0,#eef2ff 35%,#f8fafc 100%);
+}
+#app,.app,.container{
+ max-width:1100px;
+ margin:auto;
+ background:var(--card);
+ border-radius:18px;
+ padding:30px;
+ box-shadow:0 18px 40px rgba(79,70,229,.12);
+ border:1px solid rgba(255,255,255,.5);
+}
+h1,h2,h3{
+ margin-top:0;
+ color:var(--primary);
+ border-left:6px solid var(--primary2);
+ padding-left:12px;
+}
+p,label,span{line-height:1.6}
+input,select,textarea{
+ width:100%;
+ max-width:420px;
+ padding:12px 14px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ outline:none;
+ transition:.25s;
+ background:#fff;
+}
+input:focus,select:focus,textarea:focus{
+ border-color:var(--primary);
+ box-shadow:0 0 0 4px rgba(79,70,229,.12);
+}
+button{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+ border:none;
+ border-radius:12px;
+ padding:12px 20px;
+ font-weight:600;
+ cursor:pointer;
+ transition:.25s;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(79,70,229,.25)}
+table{
+ width:100%;
+ border-collapse:collapse;
+ background:#fff;
+ border-radius:12px;
+ overflow:hidden;
+}
+th{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+}
+th,td{
+ padding:12px;
+ border-bottom:1px solid var(--border);
+ text-align:left;
+}
+code{
+ background:#eef2ff;
+ padding:2px 6px;
+ border-radius:6px;
+ color:#4338ca;
+}
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🚀 Curso Completo de Vue.js 2</h1>
+            <p class="subtitle">Aprenda Vue.js do zero até o avançado</p>
+            <p class="description">
+                Um curso prático e interativo com 12 módulos de aprendizado, exemplos funcionais
+                e dois projetos práticos de CRUD. Todos os exemplos possuem design simples e limpo
+                com paleta azul e branca.
+            </p>
+        </header>
+
+        <!-- Módulos -->
+        <div class="modules-grid">
+            <!-- Módulo 1 -->
+            <a href="01_Instalacao_Vue/index.html" class="module-card">
+                <div class="module-header">
+                    <div class="module-number">Módulo 01</div>
+                    <div>📦 Instalação Vue.js</div>
+                </div>
+                <div class="module-body">
+                    <p class="module-description">
+                        Instale e configure Vue.js via CDN ou NPM. Aprenda os conceitos fundamentais
+                        e crie seu primeiro aplicativo.
+                    </p>
+                    <a href="01_Instalacao_Vue/index.html" class="module-link">Acessar</a>
+                </div>
+            </a>
+
+            <!-- Módulo 2 -->
+            <a href="02_Diretivas/index.html" class="module-card">
+                <div class="module-header">
+                    <div class="module-number">Módulo 02</div>
+                    <div>📌 Diretivas</div>
+                </div>
+                <div class="module-body">
+                    <p class="module-description">
+                        Aprenda as principais diretivas: v-if, v-for, v-bind, v-model, v-on, v-show.
+                        Exemplos interativos para cada uma.
+                    </p>
+                    <a href="02_Diretivas/index.html" class="module-link">Acessar</a>
+                </div>
+            </a>
+
+            <!-- Módulo 3 -->
+            <a href="03_Diretiva_v-model/index.html" class="module-card">
+                <div class="module-header">
+                    <div class="module-number">Módulo 03</div>
+                    <div>🔗 v-model</div>
+                </div>
+                <div class="module-body">
+                    <p class="module-description">
+                        Two-way data binding. Aprenda a sincronizar dados com inputs, textareas,
+                        selects, checkboxes e radio buttons.
+                    </p>
+                    <a href="03_Diretiva_v-model/index.html" class="module-link">Acessar</a>
+                </div>
+            </a>
+
+            <!-- Módulo 4 -->
+            <a href="04_v-bind_atributos/index.html" class="module-card">
+                <div class="module-header">
+                    <div class="module-number">Módulo 04</div>
+                    <div>🔗 v-bind Atributos</div>
+                </div>
+                <div class="module-body">
+                    <p class="module-description">
+                        Vincule atributos HTML dinamicamente. Trabalhe com href, src, alt, disabled
+                        e atributos customizados.
+                    </p>
+                    <a href="04_v-bind_atributos/index.html" class="module-link">Acessar</a>
+                </div>
+            </a>
+
+            <!-- Módulo 5 -->
+            <a href="05_v-bind_class_style/index.html" class="module-card">
+                <div class="module-header">
+                    <div class="module-number">Módulo 05</div>
+                    <div>🎨 v-bind Class/Style</div>
+                </div>
+                <div class="module-body">
+                    <p class="module-description">
+                        Aplique classes e estilos dinamicamente. Crie temas, barras de progresso
+                        e componentes visuais interativos.
+                    </p>
+                    <a href="05_v-bind_class_style/index.html" class="module-link">Acessar</a>
+                </div>
+            </a>
+
+            <!-- Módulo 6 -->
+            <a href="06_v-on_eventos/index.html" class="module-card">
+                <div class="module-header">
+                    <div class="module-number">Módulo 06</div>
+                    <div>👆 v-on Eventos</div>
+                </div>
+                <div class="module-body">
+                    <p class="module-description">
+                        Manipule eventos do usuário. Click, double click, mouse events, keyboard events
+                        e event modifiers.
+                    </p>
+                    <a href="06_v-on_eventos/index.html" class="module-link">Acessar</a>
+                </div>
+            </a>
+
+            <!-- Módulo 7 -->
+            <a href="07_Filters/index.html" class="module-card">
+                <div class="module-header">
+                    <div class="module-number">Módulo 07</div>
+                    <div>🎯 Filters</div>
+                </div>
+                <div class="module-body">
+                    <p class="module-description">
+                        Formate texto com filtros. Capitalize, uppercase, lowercase, reverse, truncate,
+                        currency e combine múltiplos filtros.
+                    </p>
+                    <a href="07_Filters/index.html" class="module-link">Acessar</a>
+                </div>
+            </a>
+
+            <!-- Módulo 8 -->
+            <a href="08_Computed_Watch/index.html" class="module-card">
+                <div class="module-header">
+                    <div class="module-number">Módulo 08</div>
+                    <div>⚙️ Computed & Watch</div>
+                </div>
+                <div class="module-body">
+                    <p class="module-description">
+                        Propriedades computadas e observers. Cache reativo, validação, cálculos
+                        automáticos e sincronização com APIs.
+                    </p>
+                    <a href="08_Computed_Watch/index.html" class="module-link">Acessar</a>
+                </div>
+            </a>
+
+            <!-- Módulo 9 -->
+            <a href="09_Lifecycle_Hooks/index.html" class="module-card">
+                <div class="module-header">
+                    <div class="module-number">Módulo 09</div>
+                    <div>🔄 Lifecycle Hooks</div>
+                </div>
+                <div class="module-body">
+                    <p class="module-description">
+                        Ciclo de vida do componente. Entenda cada fase: creation, mounting, updating
+                        e destruction com exemplos práticos.
+                    </p>
+                    <a href="09_Lifecycle_Hooks/index.html" class="module-link">Acessar</a>
+                </div>
+            </a>
+
+            <!-- Módulo 10 -->
+            <a href="10_Componentes/index.html" class="module-card">
+                <div class="module-header">
+                    <div class="module-number">Módulo 10</div>
+                    <div>🧩 Componentes</div>
+                </div>
+                <div class="module-body">
+                    <p class="module-description">
+                        Componentes reutilizáveis. Props, emit, slots e comunicação pai-filho
+                        com exemplos práticos.
+                    </p>
+                    <a href="10_Componentes/index.html" class="module-link">Acessar</a>
+                </div>
+            </a>
+        </div>
+
+        <!-- Seção de Práticas -->
+        <div class="practices-section">
+            <h2>🎯 Projetos Práticos</h2>
+            <div class="practice-grid">
+                <!-- CRUD -->
+                <a href="Pratica_CRUD/index.html" class="practice-card">
+                    <h3>Gerenciador de Contatos (CRUD)</h3>
+                    <p>
+                        Projeto prático completo: Criar, Ler, Atualizar e Deletar contatos.
+                        Aplique os conhecimentos dos módulos 1-10 neste projeto.
+                    </p>
+                    <span class="practice-link">→ Acessar Prática</span>
+                </a>
+
+                <!-- CRUD Melhorias -->
+                <a href="Pratica_CRUD_Melhorias/index.html" class="practice-card">
+                    <h3>CRUD com Melhorias</h3>
+                    <p>
+                        Versão avançada do CRUD com mensagens de confirmação, contador de contatos,
+                        validação aprimorada e feedback visual.
+                    </p>
+                    <span class="practice-link">→ Acessar Prática</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Características -->
+        <div class="features">
+            <h2>✨ Características do Curso</h2>
+            <div class="features-list">
+                <div class="feature-item">
+                    <strong>📚 12 Módulos</strong>
+                    <p>Cobertura completa de Vue.js 2.7.14 do básico ao avançado</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🎯 Exemplos Interativos</strong>
+                    <p>Todos os exemplos funcionam no navegador sem instalação</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🎨 Design Simples</strong>
+                    <p>Paleta azul e branca com visual limpo e profissional</p>
+                </div>
+                <div class="feature-item">
+                    <strong>📱 Responsivo</strong>
+                    <p>Adapta-se perfeitamente para desktop e mobile</p>
+                </div>
+                <div class="feature-item">
+                    <strong>✅ Todo Checklists</strong>
+                    <p>Cada módulo possui um arquivo TODO.md com checkpoints</p>
+                </div>
+                <div class="feature-item">
+                    <strong>🚀 Projetos Práticos</strong>
+                    <p>Dois projetos CRUD para praticar e consolidar aprendizado</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>🎓 Curso de Vue.js 2 | Criado em 2026 | Versão 1.0</p>
+            <p>Todos os exemplos usam Vue.js 2.7.14 via CDN</p>
+        </footer>
+    </div>
+</body>
+</html>

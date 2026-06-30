@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+ <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Painel Administrativo — E-commerce</title>
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+ <link href="https://cdn.jsdelivr.net/npm/vuetify@3/dist/vuetify.min.css" rel="stylesheet">
+ <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7/css/materialdesignicons.min.css" rel="stylesheet">
+</head>
+<body>
+ <div id="app">
+ <v-app>
+ <!-- ===== LOGIN ===== -->
+ <v-main v-if="!token" class="bg-grey-lighten-3">
+ <v-container class="d-flex justify-center align-center" style="min-height:90vh">
+ <v-card width="400" class="pa-4">
+ <v-card-title class="text-center">{{ modoRegistro ? 'Registrar' : 'Login' }}</v-card-title>
+ <v-card-text>
+ <v-text-field v-if="modoRegistro" v-model="form.nome" label="Nome"></v-text-field>
+ <v-text-field v-model="form.email" label="Email"></v-text-field>
+ <v-text-field v-model="form.senha" label="Senha" type="password"></v-text-field>
+ <v-alert v-if="erro" type="error" density="compact" class="mb-2">{{ erro }}</v-alert>
+ <v-btn block color="primary" @click="modoRegistro ? registrar() : entrar()">
+ {{ modoRegistro ? 'Criar conta' : 'Entrar' }}
+ </v-btn>
+ <v-btn block variant="text" class="mt-2" @click="modoRegistro = !modoRegistro; erro=''">
+ {{ modoRegistro ? 'Já tenho conta' : 'Criar nova conta' }}
+ </v-btn>
+ <p class="text-caption text-center mt-2">Seed: admin@admin.com / 123456</p>
+ </v-card-text>
+ </v-card>
+ </v-container>
+ </v-main>
+
+ <!-- ===== PAINEL ===== -->
+ <template v-else>
+ <v-app-bar color="primary">
+ <v-app-bar-title>Painel — {{ usuario.nome }}</v-app-bar-title>
+ <v-btn icon="mdi-logout" @click="sair"></v-btn>
+ </v-app-bar>
+ <v-main class="bg-grey-lighten-3">
+ <v-container>
+ <!-- Clima (API pública Open-Meteo, sem chave) -->
+ <v-card class="mb-4 pa-3">
+ <div class="d-flex align-center flex-wrap" style="gap:8px">
+ <strong>Clima:</strong>
+ <v-text-field v-model="cidade" label="Cidade" density="compact" hide-details style="max-width:200px"></v-text-field>
+ <v-btn size="small" color="primary" @click="buscarClima">Buscar</v-btn>
+ <span v-if="climaCarregando">carregando...</span>
+ <span v-if="clima">{{ clima }}</span>
+ <span v-if="climaErro" class="text-error">{{ climaErro }}</span>
+ </div>
+ </v-card>
+
+ <!-- CRUD de produtos -->
+ <v-card class="pa-3">
+ <div class="d-flex justify-space-between align-center mb-3 flex-wrap" style="gap:8px">
+ <h3>Produtos</h3>
+ <div class="d-flex" style="gap:8px">
+ <v-text-field v-model="filtro" label="Filtrar" density="compact" hide-details style="max-width:220px"></v-text-field>
+ <v-btn color="success" @click="abrirNovo">Novo produto</v-btn>
+ </div>
+ </div>
+
+ <v-data-table :headers="headers" :items="produtosFiltrados" :items-per-page="5">
+ <template #item.imagem="{ item }">
+ <v-img :src="item.imagem" width="48" height="48" cover></v-img>
+ </template>
+ <template #item.preco="{ item }">R$ {{ Number(item.preco).toFixed(2) }}</template>
+ <template #item.acoes="{ item }">
+ <v-btn size="x-small" color="info" class="mr-1" @click="editar(item)">Editar</v-btn>
+ <v-btn size="x-small" color="error" @click="excluir(item.id)">Excluir</v-btn>
+ </template>
+ </v-data-table>
+ </v-card>
+ </v-container>
+ </v-main>
+
+ <!-- Modal produto -->
+ <v-dialog v-model="dialog" max-width="520">
+ <v-card>
+ <v-card-title>{{ editando ? 'Editar produto' : 'Novo produto' }}</v-card-title>
+ <v-card-text>
+ <v-text-field v-model="prod.nome" label="Nome"></v-text-field>
+ <v-text-field v-model="prod.preco" label="Preço" type="number"></v-text-field>
+ <v-text-field v-model="prod.categoria" label="Categoria"></v-text-field>
+ <v-text-field v-model="prod.imagem" label="URL da imagem"></v-text-field>
+ <v-textarea v-model="prod.descricao" label="Descrição" rows="2"></v-textarea>
+ </v-card-text>
+ <v-card-actions>
+ <v-spacer></v-spacer>
+ <v-btn @click="dialog=false">Cancelar</v-btn>
+ <v-btn color="primary" @click="salvar">Salvar</v-btn>
+ </v-card-actions>
+ </v-card>
+ </v-dialog>
+ </template>
+ </v-app>
+ </div>
+
+ <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/vuetify@3/dist/vuetify.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ <script>
+ const { createApp } = Vue; const { createVuetify } = Vuetify;
+ const api = axios.create({ baseURL: 'http://localhost:3001' });
+ // Clima via Open-Meteo (gratuita, SEM chave de API)
+ const WMO = {0:'Céu limpo',1:'Sol entre nuvens',2:'Parc. nublado',3:'Nublado',45:'Névoa',48:'Névoa',
+ 51:'Garoa',53:'Garoa',55:'Garoa forte',61:'Chuva fraca',63:'Chuva',65:'Chuva forte',
+ 71:'Neve',73:'Neve',75:'Neve forte',80:'Pancadas',81:'Pancadas',82:'Pancadas fortes',
+ 95:'Trovoada',96:'Trovoada/granizo',99:'Trovoada/granizo'};
+
+ createApp({
+ data(){ return {
+ token: localStorage.getItem('token') || '',
+ usuario: JSON.parse(localStorage.getItem('usuario') || '{}'),
+ modoRegistro:false, form:{ nome:'', email:'', senha:'' }, erro:'',
+ produtos:[], filtro:'', dialog:false, editando:false,
+ prod:{ id:null, nome:'', preco:'', categoria:'', imagem:'', descricao:'' },
+ headers:[
+ { title:'Img', key:'imagem', sortable:false },
+ { title:'Nome', key:'nome' }, { title:'Preço', key:'preco' },
+ { title:'Categoria', key:'categoria' }, { title:'Ações', key:'acoes', sortable:false }
+ ],
+ cidade:'', clima:'', climaErro:'', climaCarregando:false
+ }; },
+ computed:{
+ produtosFiltrados(){
+ const f = this.filtro.toLowerCase();
+ return this.produtos.filter(p => p.nome.toLowerCase().includes(f)
+ || (p.categoria||'').toLowerCase().includes(f));
+ }
+ },
+ methods:{
+ authHeader(){ return { headers:{ Authorization:'Bearer '+this.token } }; },
+ async entrar(){
+ this.erro='';
+ try {
+ const { data } = await api.post('/login', { email:this.form.email, senha:this.form.senha });
+ this.aplicarLogin(data);
+ } catch(e){ this.erro = e.response?.data?.erro || 'Falha no login.'; }
+ },
+ async registrar(){
+ this.erro='';
+ try {
+ await api.post('/registro', this.form);
+ const { data } = await api.post('/login', { email:this.form.email, senha:this.form.senha });
+ this.aplicarLogin(data);
+ } catch(e){ this.erro = e.response?.data?.erro || 'Falha no registro.'; }
+ },
+ aplicarLogin(data){
+ this.token = data.token; this.usuario = data.usuario;
+ localStorage.setItem('token', data.token);
+ localStorage.setItem('usuario', JSON.stringify(data.usuario));
+ this.carregarProdutos();
+ },
+ sair(){ this.token=''; localStorage.clear(); },
+ async carregarProdutos(){
+ try { this.produtos = (await api.get('/produtos', this.authHeader())).data; }
+ catch(e){ if(e.response?.status===401) this.sair(); }
+ },
+ abrirNovo(){ this.editando=false; this.prod={ id:null,nome:'',preco:'',categoria:'',imagem:'',descricao:'' }; this.dialog=true; },
+ editar(item){ this.editando=true; this.prod={ ...item }; this.dialog=true; },
+ async salvar(){
+ try {
+ if(this.editando) await api.put('/produtos/'+this.prod.id, this.prod, this.authHeader());
+ else await api.post('/produtos', this.prod, this.authHeader());
+ this.dialog=false; this.carregarProdutos();
+ } catch(e){ alert('Erro ao salvar produto.'); }
+ },
+ async excluir(id){
+ if(!confirm('Excluir este produto?')) return;
+ await api.delete('/produtos/'+id, this.authHeader());
+ this.carregarProdutos();
+ },
+ async buscarClima(){
+ this.clima=''; this.climaErro='';
+ if(!this.cidade.trim()){ this.climaErro='Digite uma cidade.'; return; }
+ this.climaCarregando=true;
+ try {
+ const geo = await axios.get('https://geocoding-api.open-meteo.com/v1/search',
+ { params:{ name:this.cidade, count:1, language:'pt', format:'json' } });
+ if(!geo.data.results || !geo.data.results.length){ this.climaErro='Cidade não encontrada.'; return; }
+ const { latitude, longitude, name } = geo.data.results[0];
+ const { data } = await axios.get('https://api.open-meteo.com/v1/forecast',
+ { params:{ latitude, longitude, current_weather:true } });
+ const c = data.current_weather;
+ this.clima = `${name}: ${Math.round(c.temperature)}°C, ${WMO[c.weathercode]||'—'}`;
+ } catch(e){ this.climaErro = 'API de clima indisponível.'; }
+ finally { this.climaCarregando=false; }
+ }
+ },
+ mounted(){ if(this.token) this.carregarProdutos(); }
+ }).use(createVuetify()).mount('#app');
+ </script>
+</body>
+</html>

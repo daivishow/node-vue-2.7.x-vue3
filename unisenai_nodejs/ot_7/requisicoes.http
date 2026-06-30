@@ -1,0 +1,56 @@
+GET http://localhost:3080/
+
+###
+
+PUT http://localhost:3080/novogame/0
+Content-Type: application/json
+
+{
+    "title": "Super Mario Odyssey",
+    "studio": "Nintendo",
+    "price": 240
+}
+
+###
+
+PUT http://localhost:3080/novogame/2
+Content-Type: application/json
+
+{
+    "title": "Dark Souls III",
+    "studio": "FromSoftware",
+    "price": 120
+}
+
+###
+
+PUT http://localhost:3080/novogame/4
+Content-Type: application/json
+
+{
+    "title": "Grand Theft Auto VI",
+    "studio": "Rockstar Games",
+    "price": 350
+}
+
+###
+
+PUT http://localhost:3080/novogame/6
+Content-Type: application/json
+
+{
+    "title": "Silksong",
+    "studio": "Team Cherry",
+    "price": 80
+}
+
+###
+
+PUT http://localhost:3080/novogame/8
+Content-Type: application/json
+
+{
+    "title": "EA Sports FC 24",
+    "studio": "EA Sports",
+    "price": 300
+}

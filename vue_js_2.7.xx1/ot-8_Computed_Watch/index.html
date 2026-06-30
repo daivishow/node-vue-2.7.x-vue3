@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computed Properties e Watch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f5f5f5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #003366;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fbff;
+            border-radius: 6px;
+            border-left: 4px solid #0066cc;
+        }
+
+        h2 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .demo {
+            background: white;
+            border: 2px solid #e0e7ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        input {
+            padding: 8px 12px;
+            border: 2px solid #e0e7ff;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+            margin: 10px 0;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0066cc;
+        }
+
+        .preview {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border-left: 4px solid #0066cc;
+            font-weight: 600;
+            color: #003366;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #003366;
+            font-size: 14px;
+        }
+
+        .cart-item {
+            background: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border-left: 3px solid #0066cc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .log {
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .log-item {
+            padding: 2px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            background: #0052a3;
+        }
+    </style>
+
+<style id="chatgpt-theme">
+:root{
+ --bg:#eef2ff;--card:#ffffff;--primary:#4f46e5;--primary2:#7c3aed;
+ --text:#1f2937;--muted:#6b7280;--border:#e5e7eb;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;padding:32px;
+ font-family:'Segoe UI',Tahoma,sans-serif;
+ color:var(--text);
+ background:
+ radial-gradient(circle at top right,#c7d2fe 0,#eef2ff 35%,#f8fafc 100%);
+}
+#app,.app,.container{
+ max-width:1100px;
+ margin:auto;
+ background:var(--card);
+ border-radius:18px;
+ padding:30px;
+ box-shadow:0 18px 40px rgba(79,70,229,.12);
+ border:1px solid rgba(255,255,255,.5);
+}
+h1,h2,h3{
+ margin-top:0;
+ color:var(--primary);
+ border-left:6px solid var(--primary2);
+ padding-left:12px;
+}
+p,label,span{line-height:1.6}
+input,select,textarea{
+ width:100%;
+ max-width:420px;
+ padding:12px 14px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ outline:none;
+ transition:.25s;
+ background:#fff;
+}
+input:focus,select:focus,textarea:focus{
+ border-color:var(--primary);
+ box-shadow:0 0 0 4px rgba(79,70,229,.12);
+}
+button{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+ border:none;
+ border-radius:12px;
+ padding:12px 20px;
+ font-weight:600;
+ cursor:pointer;
+ transition:.25s;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(79,70,229,.25)}
+table{
+ width:100%;
+ border-collapse:collapse;
+ background:#fff;
+ border-radius:12px;
+ overflow:hidden;
+}
+th{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+}
+th,td{
+ padding:12px;
+ border-bottom:1px solid var(--border);
+ text-align:left;
+}
+code{
+ background:#eef2ff;
+ padding:2px 6px;
+ border-radius:6px;
+ color:#4338ca;
+}
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ Computed Properties e Watch</h1>
+
+        <div id="app">
+            <!-- Computed Property - Soma -->
+            <div class="section">
+                <h2>Computed Property - Soma</h2>
+                <div class="demo">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Número 1:</label>
+                            <input type="number" v-model.number="num1">
+                        </div>
+                        <div class="form-group">
+                            <label>Número 2:</label>
+                            <input type="number" v-model.number="num2">
+                        </div>
+                    </div>
+                    <div class="preview">
+                        {{ num1 }} + {{ num2 }} = <strong>{{ sum }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Computed Property - Full Name -->
+            <div class="section">
+                <h2>Computed Property - Nome Completo</h2>
+                <div class="demo">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Primeiro Nome:</label>
+                            <input type="text" v-model="firstName" placeholder="João">
+                        </div>
+                        <div class="form-group">
+                            <label>Último Nome:</label>
+                            <input type="text" v-model="lastName" placeholder="Silva">
+                        </div>
+                    </div>
+                    <div class="preview">
+                        Nome Completo: <strong>{{ fullName }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Watch - Contador -->
+            <div class="section">
+                <h2>Watch - Observando Mudanças</h2>
+                <div class="demo">
+                    <div class="form-group">
+                        <label>Contador:</label>
+                        <input type="number" v-model.number="counter">
+                    </div>
+                    <div class="preview">
+                        Valor atual: <strong>{{ counter }}</strong><br>
+                        Mudanças: <strong>{{ changeCount }}</strong><br>
+                        Status: <strong>{{ counterStatus }}</strong>
+                    </div>
+                    <div class="log">
+                        <div v-for="(log, index) in watchLog" :key="index" class="log-item">
+                            {{ log }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carrinho de Compras -->
+            <div class="section">
+                <h2>Exemplo Prático: Carrinho de Compras</h2>
+                <div class="demo">
+                    <div style="margin-bottom: 15px;">
+                        <button @click="addToCart">➕ Adicionar Item</button>
+                    </div>
+
+                    <div v-if="cartItems.length > 0">
+                        <div v-for="(item, index) in cartItems" :key="index" class="cart-item">
+                            <span>{{ item.name }} - R$ {{ item.price.toFixed(2) }}</span>
+                            <button @click="removeFromCart(index)" style="margin: 0; background: #ff6b6b;">×</button>
+                        </div>
+                    </div>
+                    <div v-else style="text-align: center; color: #999; padding: 20px;">
+                        Carrinho vazio
+                    </div>
+
+                    <div class="preview" style="margin-top: 15px;">
+                        <strong>Total de Itens:</strong> {{ cartCount }}<br>
+                        <strong>Subtotal:</strong> R$ {{ subtotal.toFixed(2) }}<br>
+                        <strong>Imposto (10%):</strong> R$ {{ tax.toFixed(2) }}<br>
+                        <strong style="font-size: 18px;">TOTAL: R$ {{ total.toFixed(2) }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Watch com Deep Object -->
+            <div class="section">
+                <h2>Watch com Objetos Aninhados</h2>
+                <div class="demo">
+                    <div class="form-group">
+                        <label>Nome do Usuário:</label>
+                        <input type="text" v-model="user.name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email do Usuário:</label>
+                        <input type="email" v-model="user.email">
+                    </div>
+                    <div class="preview">
+                        {{ userMessage }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                num1: 0,
+                num2: 0,
+                firstName: '',
+                lastName: '',
+                counter: 0,
+                changeCount: 0,
+                counterStatus: 'Aguardando mudanças...',
+                watchLog: [],
+                cartItems: [
+                    { name: 'Laptop', price: 2500 },
+                    { name: 'Mouse', price: 50 }
+                ],
+                user: {
+                    name: 'João Silva',
+                    email: 'joao@example.com'
+                },
+                userMessage: ''
+            },
+            computed: {
+                sum() {
+                    return this.num1 + this.num2
+                },
+                fullName() {
+                    return (this.firstName + ' ' + this.lastName).trim()
+                },
+                cartCount() {
+                    return this.cartItems.length
+                },
+                subtotal() {
+                    return this.cartItems.reduce((total, item) => total + item.price, 0)
+                },
+                tax() {
+                    return this.subtotal * 0.1
+                },
+                total() {
+                    return this.subtotal + this.tax
+                }
+            },
+            watch: {
+                counter(newValue, oldValue) {
+                    this.changeCount++
+                    this.counterStatus = newValue > oldValue ? '📈 Aumentou' : '📉 Diminuiu'
+                    this.addWatchLog(`Mudança: ${oldValue} → ${newValue}`)
+                },
+                user: {
+                    handler(newValue) {
+                        this.userMessage = `✅ Usuário atualizado: ${newValue.name} (${newValue.email})`
+                        this.addWatchLog(`Usuário mudou: ${newValue.name}`)
+                    },
+                    deep: true
+                }
+            },
+            methods: {
+                addToCart() {
+                    const items = [
+                        { name: 'Teclado', price: 150 },
+                        { name: 'Monitor', price: 800 },
+                        { name: 'Webcam', price: 200 }
+                    ]
+                    const randomItem = items[Math.floor(Math.random() * items.length)]
+                    this.cartItems.push({ ...randomItem })
+                },
+                removeFromCart(index) {
+                    this.cartItems.splice(index, 1)
+                },
+                addWatchLog(message) {
+                    const time = new Date().toLocaleTimeString()
+                    this.watchLog.unshift(`[${time}] ${message}`)
+                    if (this.watchLog.length > 5) {
+                        this.watchLog.pop()
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

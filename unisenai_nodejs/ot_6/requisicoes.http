@@ -1,0 +1,34 @@
+GET http://localhost:3080/
+
+###
+
+POST http://localhost:3080/novogame
+Content-Type: application/json
+
+{
+    "title": "FIFA 19",
+    "studio": "EA Sports",
+    "price": 60
+}
+
+###
+
+POST http://localhost:3080/novogame
+Content-Type: application/json
+
+{
+    "title": "FIFA 20",
+    "studio": "EA Sports",
+    "price": 80
+}
+
+###
+
+POST http://localhost:3080/novogame
+Content-Type: application/json
+
+{
+    "title": "FIFA 21",
+    "studio": "EA Sports",
+    "price": 120
+}

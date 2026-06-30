@@ -1,0 +1,17 @@
+{
+  "name": "apirest-ot12",
+  "version": "1.0.0",
+  "description": "API REST com busca por nome e camadas - OT 12",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

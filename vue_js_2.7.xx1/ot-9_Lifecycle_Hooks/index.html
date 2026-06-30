@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lifecycle Hooks - Ciclo de Vida</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f5f5f5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #003366;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fbff;
+            border-radius: 6px;
+            border-left: 4px solid #0066cc;
+        }
+
+        h2 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .demo {
+            background: white;
+            border: 2px solid #e0e7ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        .lifecycle-diagram {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.8;
+            margin-top: 10px;
+        }
+
+        .log {
+            background: #1e1e1e;
+            color: #4ec9b0;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .log-item {
+            padding: 2px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .log-item.created {
+            color: #4ec9b0;
+        }
+
+        .log-item.mounted {
+            color: #ce9178;
+        }
+
+        .log-item.updated {
+            color: #9cdcfe;
+        }
+
+        .log-item.destroyed {
+            color: #f48771;
+        }
+
+        button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        button:hover {
+            background: #0052a3;
+        }
+
+        .status {
+            background: #f0f8ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            color: #003366;
+            font-weight: 600;
+        }
+
+        .hook-box {
+            background: white;
+            border-left: 4px solid #0066cc;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+
+        .hook-box strong {
+            color: #0066cc;
+        }
+
+        .hook-box .description {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+
+<style id="chatgpt-theme">
+:root{
+ --bg:#eef2ff;--card:#ffffff;--primary:#4f46e5;--primary2:#7c3aed;
+ --text:#1f2937;--muted:#6b7280;--border:#e5e7eb;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;padding:32px;
+ font-family:'Segoe UI',Tahoma,sans-serif;
+ color:var(--text);
+ background:
+ radial-gradient(circle at top right,#c7d2fe 0,#eef2ff 35%,#f8fafc 100%);
+}
+#app,.app,.container{
+ max-width:1100px;
+ margin:auto;
+ background:var(--card);
+ border-radius:18px;
+ padding:30px;
+ box-shadow:0 18px 40px rgba(79,70,229,.12);
+ border:1px solid rgba(255,255,255,.5);
+}
+h1,h2,h3{
+ margin-top:0;
+ color:var(--primary);
+ border-left:6px solid var(--primary2);
+ padding-left:12px;
+}
+p,label,span{line-height:1.6}
+input,select,textarea{
+ width:100%;
+ max-width:420px;
+ padding:12px 14px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ outline:none;
+ transition:.25s;
+ background:#fff;
+}
+input:focus,select:focus,textarea:focus{
+ border-color:var(--primary);
+ box-shadow:0 0 0 4px rgba(79,70,229,.12);
+}
+button{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+ border:none;
+ border-radius:12px;
+ padding:12px 20px;
+ font-weight:600;
+ cursor:pointer;
+ transition:.25s;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(79,70,229,.25)}
+table{
+ width:100%;
+ border-collapse:collapse;
+ background:#fff;
+ border-radius:12px;
+ overflow:hidden;
+}
+th{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+}
+th,td{
+ padding:12px;
+ border-bottom:1px solid var(--border);
+ text-align:left;
+}
+code{
+ background:#eef2ff;
+ padding:2px 6px;
+ border-radius:6px;
+ color:#4338ca;
+}
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Lifecycle Hooks - Ciclo de Vida do Vue</h1>
+
+        <div id="app">
+            <!-- Ciclo de Vida -->
+            <div class="section">
+                <h2>Fases do Ciclo de Vida</h2>
+                <div class="demo">
+                    <div class="lifecycle-diagram">
+                        1️⃣ Creation<br>
+                        ├─ beforeCreate: Dados ainda não estão prontos<br>
+                        └─ created: ✅ Dados iniciados, pronto para usar<br>
+                        <br>
+                        2️⃣ Mounting (Renderização)<br>
+                        ├─ beforeMount: Template compilado, DOM ainda não atualizado<br>
+                        └─ mounted: ✅ Componente renderizado no DOM<br>
+                        <br>
+                        3️⃣ Updating (Mudanças)<br>
+                        ├─ beforeUpdate: Dados mudaram, DOM ainda não<br>
+                        └─ updated: ✅ DOM atualizado<br>
+                        <br>
+                        4️⃣ Destruction<br>
+                        ├─ beforeDestroy: Antes de ser destruído<br>
+                        └─ destroyed: ✅ Componente removido
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulação de Lifecycle -->
+            <div class="section">
+                <h2>Simulação do Ciclo de Vida</h2>
+                <div class="demo">
+                    <button @click="resetApp">🔄 Reiniciar</button>
+                    <button @click="updateData">📝 Atualizar Dado</button>
+                    <button @click="destroyApp">❌ Destruir</button>
+
+                    <div class="status">
+                        Status: <strong>{{ appStatus }}</strong>
+                    </div>
+
+                    <div class="log">
+                        <div v-for="(log, index) in logs" :key="index" :class="'log-item ' + log.type">
+                            {{ log.message }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hooks Principais -->
+            <div class="section">
+                <h2>📋 Hooks Principais e Seus Usos</h2>
+                <div class="demo">
+                    <div class="hook-box">
+                        <strong>1. beforeCreate()</strong>
+                        <div class="description">Executado antes de initializar as propriedades do componente. data e methods ainda não estão disponíveis.</div>
+                    </div>
+
+                    <div class="hook-box">
+                        <strong>2. created()</strong>
+                        <div class="description">✅ Ideal para: Buscar dados da API, inicializar variáveis, fazer requisições HTTP</div>
+                    </div>
+
+                    <div class="hook-box">
+                        <strong>3. beforeMount()</strong>
+                        <div class="description">Executado antes do componente ser inserido no DOM. Template foi compilado.</div>
+                    </div>
+
+                    <div class="hook-box">
+                        <strong>4. mounted()</strong>
+                        <div class="description">✅ Ideal para: Acessar o DOM, usar bibliotecas jQuery, configurar plugins</div>
+                    </div>
+
+                    <div class="hook-box">
+                        <strong>5. beforeUpdate()</strong>
+                        <div class="description">Executado antes dos dados serem atualizados no DOM.</div>
+                    </div>
+
+                    <div class="hook-box">
+                        <strong>6. updated()</strong>
+                        <div class="description">✅ Ideal para: Reagir a mudanças de dados, atualizar gráficos</div>
+                    </div>
+
+                    <div class="hook-box">
+                        <strong>7. beforeDestroy()</strong>
+                        <div class="description">Executado antes do componente ser removido. Ainda tem acesso aos dados.</div>
+                    </div>
+
+                    <div class="hook-box">
+                        <strong>8. destroyed()</strong>
+                        <div class="description">✅ Ideal para: Limpar listeners, cancelar requisições, limpar timers</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dados do Componente -->
+            <div class="section">
+                <h2>📊 Dados do Componente</h2>
+                <div class="demo">
+                    <pre>{{ componentData }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                appStatus: 'Inicializando...',
+                logs: [],
+                isDestroyed: false,
+                dataValue: 'Valor Inicial',
+                updateCount: 0
+            },
+            computed: {
+                componentData() {
+                    return JSON.stringify({
+                        appStatus: this.appStatus,
+                        dataValue: this.dataValue,
+                        updateCount: this.updateCount,
+                        logsCount: this.logs.length
+                    }, null, 2)
+                }
+            },
+            methods: {
+                addLog(message, type = 'info') {
+                    const time = new Date().toLocaleTimeString()
+                    this.logs.unshift({
+                        message: `[${time}] ${message}`,
+                        type: type
+                    })
+                    if (this.logs.length > 15) {
+                        this.logs.pop()
+                    }
+                },
+                resetApp() {
+                    this.logs = []
+                    this.isDestroyed = false
+                    this.appStatus = 'Reiniciando...'
+                    this.dataValue = 'Valor Inicial'
+                    this.updateCount = 0
+                    this.addLog('beforeCreate(): Dados ainda não prontos', 'created')
+                    setTimeout(() => {
+                        this.addLog('created(): ✅ Dados inicializados!', 'created')
+                        this.appStatus = 'created'
+                    }, 100)
+                    setTimeout(() => {
+                        this.addLog('beforeMount(): Template compilado', 'mounted')
+                        this.appStatus = 'beforeMount'
+                    }, 200)
+                    setTimeout(() => {
+                        this.addLog('mounted(): ✅ Renderizado no DOM!', 'mounted')
+                        this.appStatus = 'mounted'
+                    }, 300)
+                },
+                updateData() {
+                    if (this.isDestroyed) {
+                        this.appStatus = 'Componente foi destruído!'
+                        return
+                    }
+                    this.addLog('beforeUpdate(): Dados vão mudar', 'updated')
+                    this.updateCount++
+                    this.dataValue = 'Valor Atualizado #' + this.updateCount
+                    this.$nextTick(() => {
+                        this.addLog('updated(): ✅ DOM atualizado!', 'updated')
+                        this.appStatus = 'updated'
+                    })
+                },
+                destroyApp() {
+                    this.addLog('beforeDestroy(): Antes de destruir', 'destroyed')
+                    this.appStatus = 'beforeDestroy'
+                    setTimeout(() => {
+                        this.isDestroyed = true
+                        this.addLog('destroyed(): ✅ Componente removido!', 'destroyed')
+                        this.appStatus = 'destroyed'
+                    }, 300)
+                }
+            },
+            beforeCreate() {
+                this.addLog('Hook: beforeCreate() chamado', 'created')
+            },
+            created() {
+                this.addLog('Hook: created() chamado', 'created')
+                this.appStatus = 'created'
+            },
+            beforeMount() {
+                this.addLog('Hook: beforeMount() chamado', 'mounted')
+            },
+            mounted() {
+                this.addLog('Hook: mounted() chamado', 'mounted')
+                this.appStatus = 'mounted'
+                this.addLog('💡 Componente pronto para uso!', 'mounted')
+            },
+            beforeUpdate() {
+                this.addLog('Hook: beforeUpdate() chamado', 'updated')
+            },
+            updated() {
+                this.addLog('Hook: updated() chamado', 'updated')
+            }
+        });
+    </script>
+</body>
+</html>

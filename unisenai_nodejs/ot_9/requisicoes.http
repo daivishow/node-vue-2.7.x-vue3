@@ -1,0 +1,64 @@
+GET http://localhost:3000/cars
+
+###
+
+POST http://localhost:3000/cars
+Content-Type: application/json
+
+{
+    "nome": "Polo",
+    "preco": 90000,
+    "marca": "Volkswagen"
+}
+
+###
+
+POST http://localhost:3000/cars
+Content-Type: application/json
+
+{
+    "nome": "Kicks",
+    "preco": 110000,
+    "marca": "Nissan"
+}
+
+###
+
+POST http://localhost:3000/cars
+Content-Type: application/json
+
+{
+    "nome": "Compass",
+    "preco": 180000,
+    "marca": "Jeep"
+}
+
+###
+
+PUT http://localhost:3000/cars/0
+Content-Type: application/json
+
+{
+    "nome": "Onix Plus",
+    "preco": 85000,
+    "marca": "Chevrolet"
+}
+
+###
+
+PUT http://localhost:3000/cars/3
+Content-Type: application/json
+
+{
+    "nome": "Pulse",
+    "preco": 95000,
+    "marca": "Fiat"
+}
+
+###
+
+DELETE http://localhost:3000/cars/delete/2
+
+###
+
+DELETE http://localhost:3000/cars/delete/5

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Componentes Reutilizáveis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f5f5f5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #003366;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fbff;
+            border-radius: 6px;
+            border-left: 4px solid #0066cc;
+        }
+
+        h2 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .demo {
+            background: white;
+            border: 2px solid #e0e7ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        button:hover {
+            background: #0052a3;
+        }
+
+        /* Componentes -->
+        .custom-button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .custom-button:hover {
+            background: #0052a3;
+            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.3);
+        }
+
+        .custom-button.primary {
+            background: #0066cc;
+        }
+
+        .custom-button.success {
+            background: #4caf50;
+        }
+
+        .custom-button.danger {
+            background: #f44336;
+        }
+
+        .custom-button.success:hover {
+            background: #45a049;
+        }
+
+        .custom-button.danger:hover {
+            background: #da190b;
+        }
+
+        .card {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 51, 102, 0.1);
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #0066cc 0%, #003366 100%);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 15px;
+            color: #333;
+        }
+
+        .card-footer {
+            background: #f8fbff;
+            padding: 10px 15px;
+            border-top: 1px solid #e0e7ff;
+            text-align: right;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .badge.info {
+            background: #e3f2fd;
+            color: #0066cc;
+        }
+
+        .badge.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid;
+        }
+
+        .alert.info {
+            background: #e3f2fd;
+            color: #0066cc;
+            border-left-color: #0066cc;
+        }
+
+        .alert.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left-color: #4caf50;
+        }
+
+        .alert.warning {
+            background: #fff3e0;
+            color: #e65100;
+            border-left-color: #ff9800;
+        }
+
+        .alert.danger {
+            background: #ffebee;
+            color: #c62828;
+            border-left-color: #f44336;
+        }
+
+        .list {
+            list-style: none;
+        }
+
+        .list-item {
+            padding: 10px;
+            border-bottom: 1px solid #e0e7ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .component-info {
+            background: #f0f8ff;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #003366;
+            margin-top: 10px;
+        }
+    </style>
+
+<style id="chatgpt-theme">
+:root{
+ --bg:#eef2ff;--card:#ffffff;--primary:#4f46e5;--primary2:#7c3aed;
+ --text:#1f2937;--muted:#6b7280;--border:#e5e7eb;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;padding:32px;
+ font-family:'Segoe UI',Tahoma,sans-serif;
+ color:var(--text);
+ background:
+ radial-gradient(circle at top right,#c7d2fe 0,#eef2ff 35%,#f8fafc 100%);
+}
+#app,.app,.container{
+ max-width:1100px;
+ margin:auto;
+ background:var(--card);
+ border-radius:18px;
+ padding:30px;
+ box-shadow:0 18px 40px rgba(79,70,229,.12);
+ border:1px solid rgba(255,255,255,.5);
+}
+h1,h2,h3{
+ margin-top:0;
+ color:var(--primary);
+ border-left:6px solid var(--primary2);
+ padding-left:12px;
+}
+p,label,span{line-height:1.6}
+input,select,textarea{
+ width:100%;
+ max-width:420px;
+ padding:12px 14px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ outline:none;
+ transition:.25s;
+ background:#fff;
+}
+input:focus,select:focus,textarea:focus{
+ border-color:var(--primary);
+ box-shadow:0 0 0 4px rgba(79,70,229,.12);
+}
+button{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+ border:none;
+ border-radius:12px;
+ padding:12px 20px;
+ font-weight:600;
+ cursor:pointer;
+ transition:.25s;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(79,70,229,.25)}
+table{
+ width:100%;
+ border-collapse:collapse;
+ background:#fff;
+ border-radius:12px;
+ overflow:hidden;
+}
+th{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+}
+th,td{
+ padding:12px;
+ border-bottom:1px solid var(--border);
+ text-align:left;
+}
+code{
+ background:#eef2ff;
+ padding:2px 6px;
+ border-radius:6px;
+ color:#4338ca;
+}
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>🧩 Componentes Reutilizáveis</h1>
+
+        <div id="app">
+            <!-- Botões Customizados -->
+            <div class="section">
+                <h2>Componente: CustomButton</h2>
+                <div class="demo">
+                    <custom-button type="primary" @click="handleButtonClick">Botão Primário</custom-button>
+                    <custom-button type="success" @click="handleButtonClick">Botão Sucesso</custom-button>
+                    <custom-button type="danger" @click="handleButtonClick">Botão Perigo</custom-button>
+                    <div class="component-info">
+                        <strong>Props:</strong> type (primary, success, danger)<br>
+                        <strong>Eventos:</strong> @click
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards -->
+            <div class="section">
+                <h2>Componente: Card com Slots</h2>
+                <div class="demo">
+                    <my-card title="Bem-vindo ao Vue.js">
+                        <p>Este é um componente card reutilizável com slots para conteúdo customizável.</p>
+                    </my-card>
+
+                    <my-card title="Componentes Importantes">
+                        <ul class="list">
+                            <li class="list-item">
+                                <span>Props - Passam dados pai → filho</span>
+                                <span class="badge info">Comunicação</span>
+                            </li>
+                            <li class="list-item">
+                                <span>Emit - Eventos filho → pai</span>
+                                <span class="badge info">Comunicação</span>
+                            </li>
+                            <li class="list-item">
+                                <span>Slots - Conteúdo customizável</span>
+                                <span class="badge success">Flexibilidade</span>
+                            </li>
+                        </ul>
+                    </my-card>
+
+                    <div class="component-info">
+                        <strong>Props:</strong> title<br>
+                        <strong>Slots:</strong> default (conteúdo)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertas -->
+            <div class="section">
+                <h2>Componente: Alert</h2>
+                <div class="demo">
+                    <alert-box type="info">
+                        ℹ️ Isto é uma mensagem informativa
+                    </alert-box>
+
+                    <alert-box type="success">
+                        ✅ Operação realizada com sucesso!
+                    </alert-box>
+
+                    <alert-box type="warning">
+                        ⚠️ Cuidado com esta ação!
+                    </alert-box>
+
+                    <alert-box type="danger">
+                        ❌ Erro ao processar a requisição!
+                    </alert-box>
+
+                    <div class="component-info">
+                        <strong>Props:</strong> type (info, success, warning, danger)<br>
+                        <strong>Slots:</strong> default (conteúdo)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Contatos -->
+            <div class="section">
+                <h2>Componente: Contact List</h2>
+                <div class="demo">
+                    <contact-item v-for="contact in contacts" :key="contact.id" :contact="contact" @delete="deleteContact">
+                    </contact-item>
+
+                    <div class="component-info">
+                        <strong>Props:</strong> contact (objeto com id, name, email)<br>
+                        <strong>Eventos:</strong> @delete
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conceitos Principais -->
+            <div class="section">
+                <h2>📋 Conceitos de Componentes</h2>
+                <div class="demo">
+                    <div style="font-size: 14px; line-height: 1.8;">
+                        <p><strong>Props:</strong> Dados passados de pai para filho</p>
+                        <pre style="background: #1e1e1e; color: #d4d4d4; padding: 10px; margin: 5px 0; border-radius: 4px;">
+&lt;my-component :title="parentData"&gt;&lt;/my-component&gt;
+
+// No componente
+props: ['title']</pre>
+
+                        <p style="margin-top: 15px;"><strong>Emit:</strong> Eventos do filho para pai</p>
+                        <pre style="background: #1e1e1e; color: #d4d4d4; padding: 10px; margin: 5px 0; border-radius: 4px;">
+&lt;my-component @customEvent="handleEvent"&gt;&lt;/my-component&gt;
+
+// No componente
+this.$emit('customEvent', data)</pre>
+
+                        <p style="margin-top: 15px;"><strong>Slots:</strong> Conteúdo customizável</p>
+                        <pre style="background: #1e1e1e; color: #d4d4d4; padding: 10px; margin: 5px 0; border-radius: 4px;">
+&lt;my-card&gt;
+    &lt;p&gt;Este conteúdo vai para o slot&lt;/p&gt;
+&lt;/my-card&gt;
+
+// No componente
+&lt;div&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/div&gt;</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script>
+        // Componente: CustomButton
+        Vue.component('custom-button', {
+            props: ['type'],
+            template: `
+                <button :class="['custom-button', type]" @click="$emit('click')">
+                    <slot></slot>
+                </button>
+            `
+        });
+
+        // Componente: Card
+        Vue.component('my-card', {
+            props: ['title'],
+            template: `
+                <div class="card">
+                    <div class="card-header">{{ title }}</div>
+                    <div class="card-body">
+                        <slot></slot>
+                    </div>
+                </div>
+            `
+        });
+
+        // Componente: Alert
+        Vue.component('alert-box', {
+            props: ['type'],
+            template: `
+                <div :class="['alert', type]">
+                    <slot></slot>
+                </div>
+            `
+        });
+
+        // Componente: Contact Item
+        Vue.component('contact-item', {
+            props: ['contact'],
+            template: `
+                <div class="card">
+                    <div class="card-body">
+                        <strong>{{ contact.name }}</strong><br>
+                        {{ contact.email }}
+                    </div>
+                    <div class="card-footer">
+                        <button @click="$emit('delete', contact.id)" style="background: #f44336; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Remover</button>
+                    </div>
+                </div>
+            `
+        });
+
+        // Vue App
+        new Vue({
+            el: '#app',
+            data: {
+                contacts: [
+                    { id: 1, name: 'João Silva', email: 'joao@example.com' },
+                    { id: 2, name: 'Maria Santos', email: 'maria@example.com' },
+                    { id: 3, name: 'Pedro Costa', email: 'pedro@example.com' }
+                ]
+            },
+            methods: {
+                handleButtonClick() {
+                    alert('Botão clicado!');
+                },
+                deleteContact(id) {
+                    this.contacts = this.contacts.filter(c => c.id !== id);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

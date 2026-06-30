@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-bind para Class e Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f5f5f5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 51, 102, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #003366;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fbff;
+            border-radius: 6px;
+            border-left: 4px solid #0066cc;
+        }
+
+        h2 {
+            color: #0066cc;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .demo {
+            background: white;
+            border: 2px solid #e0e7ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        /* Classes CSS -->
+        .active {
+            background: #0066cc;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .inactive {
+            background: #e0e7ff;
+            color: #003366;
+            padding: 15px;
+            border-radius: 4px;
+            font-weight: normal;
+        }
+
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #f44336;
+        }
+
+        .warning {
+            background: #fff3e0;
+            color: #e65100;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Componentes Demo -->
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .button-toggle {
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .box {
+            padding: 20px;
+            border-radius: 4px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 30px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        input {
+            padding: 8px 12px;
+            border: 2px solid #e0e7ff;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 200px;
+            margin: 10px 0;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0066cc;
+        }
+    </style>
+
+<style id="chatgpt-theme">
+:root{
+ --bg:#eef2ff;--card:#ffffff;--primary:#4f46e5;--primary2:#7c3aed;
+ --text:#1f2937;--muted:#6b7280;--border:#e5e7eb;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;padding:32px;
+ font-family:'Segoe UI',Tahoma,sans-serif;
+ color:var(--text);
+ background:
+ radial-gradient(circle at top right,#c7d2fe 0,#eef2ff 35%,#f8fafc 100%);
+}
+#app,.app,.container{
+ max-width:1100px;
+ margin:auto;
+ background:var(--card);
+ border-radius:18px;
+ padding:30px;
+ box-shadow:0 18px 40px rgba(79,70,229,.12);
+ border:1px solid rgba(255,255,255,.5);
+}
+h1,h2,h3{
+ margin-top:0;
+ color:var(--primary);
+ border-left:6px solid var(--primary2);
+ padding-left:12px;
+}
+p,label,span{line-height:1.6}
+input,select,textarea{
+ width:100%;
+ max-width:420px;
+ padding:12px 14px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ outline:none;
+ transition:.25s;
+ background:#fff;
+}
+input:focus,select:focus,textarea:focus{
+ border-color:var(--primary);
+ box-shadow:0 0 0 4px rgba(79,70,229,.12);
+}
+button{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+ border:none;
+ border-radius:12px;
+ padding:12px 20px;
+ font-weight:600;
+ cursor:pointer;
+ transition:.25s;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(79,70,229,.25)}
+table{
+ width:100%;
+ border-collapse:collapse;
+ background:#fff;
+ border-radius:12px;
+ overflow:hidden;
+}
+th{
+ background:linear-gradient(135deg,var(--primary),var(--primary2));
+ color:#fff;
+}
+th,td{
+ padding:12px;
+ border-bottom:1px solid var(--border);
+ text-align:left;
+}
+code{
+ background:#eef2ff;
+ padding:2px 6px;
+ border-radius:6px;
+ color:#4338ca;
+}
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 v-bind para Class e Style</h1>
+
+        <div id="app">
+            <!-- Classes com Objeto -->
+            <div class="section">
+                <h2>Classes com Objeto</h2>
+                <div class="demo">
+                    <button class="button" @click="isActive = !isActive">
+                        Toggle Classe
+                    </button>
+                    <div :class="{ active: isActive, inactive: !isActive }">
+                        {{ isActive ? 'ATIVO' : 'INATIVO' }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Classes Condicionais -->
+            <div class="section">
+                <h2>Classes Condicionais por Status</h2>
+                <div class="demo">
+                    <div style="margin-bottom: 10px;">
+                        <label>
+                            <input type="radio" value="success" v-model="status"> Sucesso
+                        </label>
+                        <label>
+                            <input type="radio" value="error" v-model="status"> Erro
+                        </label>
+                        <label>
+                            <input type="radio" value="warning" v-model="status"> Aviso
+                        </label>
+                    </div>
+                    <div :class="status">
+                        Status: {{ status.toUpperCase() }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Classes com Array -->
+            <div class="section">
+                <h2>Classes com Array</h2>
+                <div class="demo">
+                    <label style="display: flex; align-items: center; margin: 5px 0;">
+                        <input type="checkbox" v-model="classArray" value="highlight" style="width: auto; margin-right: 10px;">
+                        Highlight
+                    </label>
+                    <label style="display: flex; align-items: center; margin: 5px 0;">
+                        <input type="checkbox" v-model="classArray" value="bold" style="width: auto; margin-right: 10px;">
+                        Bold
+                    </label>
+                    <label style="display: flex; align-items: center; margin: 5px 0;">
+                        <input type="checkbox" v-model="classArray" value="text-center" style="width: auto; margin-right: 10px;">
+                        Centralizado
+                    </label>
+                    <div :class="classArray" style="padding: 15px; background: #f0f8ff; margin-top: 10px; border-radius: 4px;">
+                        Texto com classes dinâmicas
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inline Styles -->
+            <div class="section">
+                <h2>Inline Styles - Objeto</h2>
+                <div class="demo">
+                    <input type="text" v-model="customColor" placeholder="Cor (ex: red, blue, #0066cc)">
+                    <input type="number" v-model.number="fontSize" placeholder="Tamanho (px)" min="12" max="48">
+                    <div :style="{ color: customColor, fontSize: fontSize + 'px' }" style="padding: 15px; margin-top: 10px; background: #f0f8ff; border-radius: 4px;">
+                        Texto com estilo dinâmico
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de Progresso -->
+            <div class="section">
+                <h2>Barra de Progresso Dinâmica</h2>
+                <div class="demo">
+                    <input type="range" v-model.number="progress" min="0" max="100" style="width: 100%;">
+                    <div class="progress-bar" :style="{ width: progress + '%', backgroundColor: getProgressColor() }">
+                        {{ progress }}%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tema Dark/Light -->
+            <div class="section">
+                <h2>Tema Dark/Light</h2>
+                <div class="demo">
+                    <button class="button" @click="isDarkMode = !isDarkMode">
+                        {{ isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode' }}
+                    </button>
+                    <div :style="isDarkMode ? { backgroundColor: '#333', color: '#fff' } : { backgroundColor: '#f0f8ff', color: '#003366' }" style="padding: 20px; border-radius: 4px; margin-top: 10px;">
+                        Modo: <strong>{{ isDarkMode ? 'ESCURO' : 'CLARO' }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estado Atual -->
+            <div class="section">
+                <h2>📋 Estado Atual</h2>
+                <div class="demo">
+                    <pre>{{ JSON.stringify({
+                        isActive,
+                        status,
+                        classArray,
+                        customColor,
+                        fontSize,
+                        progress,
+                        isDarkMode
+                    }, null, 2) }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                isActive: false,
+                status: 'success',
+                classArray: [],
+                customColor: '#0066cc',
+                fontSize: 16,
+                progress: 50,
+                isDarkMode: false
+            },
+            methods: {
+                getProgressColor() {
+                    if (this.progress < 30) return '#f44336';
+                    if (this.progress < 70) return '#ff9800';
+                    return '#4caf50';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

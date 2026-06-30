@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TODOLIST NODE</title>
+    <link href="/public/style.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="container">
+    <div class="tarefas">
+      <h3>TODOLIST NODE</h3>
+
+      <!-- Formulário para adicionar tarefa -->
+      <form class="d-flex" method="post" onsubmit="return validarFormulario()">
+        <input type="text" class="form-control" name="task" />
+        <input
+          type="submit"
+          name="acao"
+          class="btn btn-primary"
+          value="Inserir"
+        />
+      </form>
+
+      <!-- Lista de tarefas gerada pelo EJS -->
+      <% for(let i = 0; i < tasksList.length; i++){ %>
+        <p>
+          <%= tasksList[i] %> |
+          <a href="/deletar/<%= i %>">
+            <i class="bi bi-trash"></i>
+          </a>
+        </p>
+      <% } %>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Validação do formulário -->
+    <script>
+      function validarFormulario() {
+        var tarefa = document.getElementsByName("task")[0].value;
+        if (tarefa.trim() === "") {
+          alert("Por favor, preencha a tarefa antes de enviar.");
+          return false; // Impede o envio se o campo estiver vazio
+        }
+        return true; // Permite o envio se estiver preenchido
+      }
+    </script>
+  </body>
+</html>
